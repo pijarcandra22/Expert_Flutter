@@ -9,6 +9,7 @@ import 'package:ditonton/common/failure.dart' as _i6;
 import 'package:ditonton/domain/entities/movie.dart' as _i7;
 import 'package:ditonton/domain/repositories/movie_repository.dart' as _i2;
 import 'package:ditonton/domain/usecases/search_movies.dart' as _i4;
+import 'package:ditonton/domain/usecases/search_tvseries.dart' as _i8;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: avoid_redundant_argument_values
@@ -26,6 +27,23 @@ class _FakeEither<L, R> extends _i1.Fake implements _i3.Either<L, R> {}
 /// See the documentation for Mockito's code generation for more information.
 class MockSearchMovies extends _i1.Mock implements _i4.SearchMovies {
   MockSearchMovies() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.MovieRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeMovieRepository()) as _i2.MovieRepository);
+  @override
+  _i5.Future<_i3.Either<_i6.Failure, List<_i7.Movie>>> execute(String? query) =>
+      (super.noSuchMethod(Invocation.method(#execute, [query]),
+          returnValue: Future<_i3.Either<_i6.Failure, List<_i7.Movie>>>.value(
+              _FakeEither<_i6.Failure, List<_i7.Movie>>())) as _i5
+          .Future<_i3.Either<_i6.Failure, List<_i7.Movie>>>);
+}
+
+class MockSearchTVSeries extends _i1.Mock implements _i8.SearchTVSeries {
+  MockSearchTVSeries() {
     _i1.throwOnMissingStub(this);
   }
 

@@ -39,6 +39,7 @@ class DatabaseHelper {
         posterPath TEXT
       );
     ''');
+
   }
 
   Future<int> insertWatchlist(MovieTable movie) async {

@@ -33,23 +33,23 @@ class MovieModel extends Equatable {
   final int voteCount;
 
   factory MovieModel.fromJson(Map<String, dynamic> json) => MovieModel(
-        adult: json["adult"],
+        adult: json["adult"] == null ? false : json["adult"],
         backdropPath: json["backdrop_path"],
         genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
         id: json["id"],
-        originalTitle: json["original_title"],
+        originalTitle: json["original_title"] == null ? json["original_name"] : json["original_title"],
         overview: json["overview"],
         popularity: json["popularity"].toDouble(),
         posterPath: json["poster_path"],
-        releaseDate: json["release_date"],
-        title: json["title"],
-        video: json["video"],
+        releaseDate: json["release_date"] == null ? json["first_air_date"] : json["release_date"],
+        title: json["title"] == null ? json["name"] : json["title"],
+        video: json["video"] == null ? false : json["video"],
         voteAverage: json["vote_average"].toDouble(),
         voteCount: json["vote_count"],
       );
 
   Map<String, dynamic> toJson() => {
-        "adult": adult,
+        "adult": adult == null ? false : adult,
         "backdrop_path": backdropPath,
         "genre_ids": List<dynamic>.from(genreIds.map((x) => x)),
         "id": id,
@@ -59,7 +59,7 @@ class MovieModel extends Equatable {
         "poster_path": posterPath,
         "release_date": releaseDate,
         "title": title,
-        "video": video,
+        "video": video == null ? false : video,
         "vote_average": voteAverage,
         "vote_count": voteCount,
       };

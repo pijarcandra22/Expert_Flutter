@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:ditonton/data/datasources/movie_remote_data_source.dart';
 import 'package:ditonton/data/models/movie_detail_model.dart';
+import 'package:ditonton/data/models/tvseries_detail_model.dart';
 import 'package:ditonton/data/models/movie_response.dart';
 import 'package:ditonton/common/exception.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -55,6 +56,38 @@ void main() {
     });
   });
 
+  group('get Now Playing TVSeries', () {
+    final tMovieList = MovieResponse.fromJson(
+        json.decode(readJson('dummy_data/now_playing.json')))
+        .movieList;
+
+    test('should return list of Movie Model when the response code is 200',
+            () async {
+          // arrange
+          when(mockHttpClient
+              .get(Uri.parse('$BASE_URL/tv/on_the_air?$API_KEY')))
+              .thenAnswer((_) async =>
+              http.Response(readJson('dummy_data/now_playing.json'), 200));
+          // act
+          final result = await dataSource.getNowPlayingTVSeries();
+          // assert
+          expect(result, equals(tMovieList));
+        });
+
+    test(
+        'should throw a ServerException when the response code is 404 or other',
+            () async {
+          // arrange
+          when(mockHttpClient
+              .get(Uri.parse('$BASE_URL/tv/on_the_air?$API_KEY')))
+              .thenAnswer((_) async => http.Response('Not Found', 404));
+          // act
+          final call = dataSource.getNowPlayingTVSeries();
+          // assert
+          expect(() => call, throwsA(isA<ServerException>()));
+        });
+  });
+
   group('get Popular Movies', () {
     final tMovieList =
         MovieResponse.fromJson(json.decode(readJson('dummy_data/popular.json')))
@@ -85,6 +118,36 @@ void main() {
     });
   });
 
+  group('get Popular TVSeries', () {
+    final tMovieList =
+        MovieResponse.fromJson(json.decode(readJson('dummy_data/popular.json')))
+            .movieList;
+
+    test('should return list of movies when response is success (200)',
+            () async {
+          // arrange
+          when(mockHttpClient.get(Uri.parse('$BASE_URL/tv/popular?$API_KEY')))
+              .thenAnswer((_) async =>
+              http.Response(readJson('dummy_data/popular.json'), 200));
+          // act
+          final result = await dataSource.getPopularTVSeries();
+          // assert
+          expect(result, tMovieList);
+        });
+
+    test(
+        'should throw a ServerException when the response code is 404 or other',
+            () async {
+          // arrange
+          when(mockHttpClient.get(Uri.parse('$BASE_URL/tv/popular?$API_KEY')))
+              .thenAnswer((_) async => http.Response('Not Found', 404));
+          // act
+          final call = dataSource.getPopularTVSeries();
+          // assert
+          expect(() => call, throwsA(isA<ServerException>()));
+        });
+  });
+
   group('get Top Rated Movies', () {
     final tMovieList = MovieResponse.fromJson(
             json.decode(readJson('dummy_data/top_rated.json')))
@@ -111,6 +174,34 @@ void main() {
       // assert
       expect(() => call, throwsA(isA<ServerException>()));
     });
+  });
+
+  group('get Top Rated TVSeries', () {
+    final tMovieList = MovieResponse.fromJson(
+        json.decode(readJson('dummy_data/top_rated.json')))
+        .movieList;
+
+    test('should return list of movies when response code is 200 ', () async {
+      // arrange
+      when(mockHttpClient.get(Uri.parse('$BASE_URL/tv/top_rated?$API_KEY')))
+          .thenAnswer((_) async =>
+          http.Response(readJson('dummy_data/top_rated.json'), 200));
+      // act
+      final result = await dataSource.getTopRatedTVSeries();
+      // assert
+      expect(result, tMovieList);
+    });
+
+    test('should throw ServerException when response code is other than 200',
+            () async {
+          // arrange
+          when(mockHttpClient.get(Uri.parse('$BASE_URL/tv/top_rated?$API_KEY')))
+              .thenAnswer((_) async => http.Response('Not Found', 404));
+          // act
+          final call = dataSource.getTopRatedTVSeries();
+          // assert
+          expect(() => call, throwsA(isA<ServerException>()));
+        });
   });
 
   group('get movie detail', () {
