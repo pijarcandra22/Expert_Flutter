@@ -1,9 +1,9 @@
 import 'package:ditonton/common/constants.dart';
-import 'package:ditonton/common/state_enum.dart';
-import 'package:ditonton/presentation/provider/movie_search_notifier.dart';
+import 'package:ditonton/presentation/bloc/movie_search/search_bloc.dart';
 import 'package:ditonton/presentation/widgets/movie_card_list.dart';
 import 'package:ditonton/presentation/widgets/tvseries_card_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class SearchPage extends StatelessWidget {
@@ -21,10 +21,9 @@ class SearchPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              onSubmitted: (query) {
-                Provider.of<MovieSearchNotifier>(context, listen: false)
-                    ..fetchMovieSearch(query)
-                    ..fetchTVSeriesSearch(query);
+              onChanged: (query) {
+                context.read<SearchBloc>().add(OnQueryChanged(query));
+                context.read<TVSeriesSearchBloc>().add(OnQueryChanged(query));
               },
               decoration: InputDecoration(
                 hintText: 'Search title',
@@ -38,23 +37,28 @@ class SearchPage extends StatelessWidget {
               'TV Series',
               style: kHeading6,
             ),
-            Consumer<MovieSearchNotifier>(
-              builder: (context, data, child) {
-                if (data.stateTVSeries == RequestState.Loading) {
+            BlocBuilder<TVSeriesSearchBloc, TVSeriesSearchState>(
+              builder: (context, state) {
+                if (state is TVSeriesSearchLoading) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
-                } else if (data.stateTVSeries == RequestState.Loaded) {
-                  final result = data.searchResultTV;
+                } else if (state is TVSeriesSearchHasData) {
+                  final result = state.result;
                   return Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.all(8),
-                      scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
-                        final movie = data.searchResultTV[index];
+                        final movie = result[index];
                         return TVSeriesCard(movie);
                       },
                       itemCount: result.length,
+                    ),
+                  );
+                } else if (state is TVSeriesSearchError) {
+                  return Expanded(
+                    child: Center(
+                      child: Text(state.message),
                     ),
                   );
                 } else {
@@ -68,23 +72,28 @@ class SearchPage extends StatelessWidget {
               'Movies',
               style: kHeading6,
             ),
-            Consumer<MovieSearchNotifier>(
-              builder: (context, data, child) {
-                if (data.state == RequestState.Loading) {
+            BlocBuilder<SearchBloc, SearchState>(
+              builder: (context, state) {
+                if (state is SearchLoading) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
-                } else if (data.state == RequestState.Loaded) {
-                  final result = data.searchResult;
+                } else if (state is SearchHasData) {
+                  final result = state.result;
                   return Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.all(8),
-                      scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
-                        final movie = data.searchResult[index];
+                        final movie = result[index];
                         return MovieCard(movie);
                       },
                       itemCount: result.length,
+                    ),
+                  );
+                } else if (state is SearchError) {
+                  return Expanded(
+                    child: Center(
+                      child: Text(state.message),
                     ),
                   );
                 } else {
