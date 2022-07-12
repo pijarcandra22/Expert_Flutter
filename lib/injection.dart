@@ -47,6 +47,8 @@ import 'package:ditonton/presentation/provider/watchlist_movie_notifier.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
 
+import 'common/sqlpinning.dart';
+
 final locator = GetIt.instance;
 
 void init() {
@@ -226,5 +228,5 @@ void init() {
   locator.registerLazySingleton<DatabaseHelperTV>(() => DatabaseHelperTV());
 
   // external
-  locator.registerLazySingleton(() => http.Client());
+  locator.registerLazySingleton(() => HttpSSLPinning.client);
 }
