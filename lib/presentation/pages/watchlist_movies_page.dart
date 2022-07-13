@@ -69,7 +69,7 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         final movie = data[index];
-                        return MovieCard(movie);
+                        return TVSeriesCard(movie);
                       },
                       itemCount: data.length,
                     );
