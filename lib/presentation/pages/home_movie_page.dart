@@ -16,10 +16,8 @@ import 'package:ditonton/presentation/pages/top_rated_tvseries_page.dart';
 import 'package:ditonton/presentation/pages/popular_tvseries_page.dart';
 import 'package:ditonton/presentation/pages/tvseries_detail_page.dart';
 import 'package:ditonton/presentation/pages/watchlist_movies_page.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 class HomeMoviePage extends StatefulWidget {
   @override
@@ -43,7 +41,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
     return Scaffold(
       drawer: Drawer(
         child: Column(
-          children: [
+          children: <Widget>[
             UserAccountsDrawerHeader(
               currentAccountPicture: CircleAvatar(
                 backgroundImage: AssetImage('assets/circle-g.png'),
@@ -90,8 +88,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
         padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Text(
                 'Now Playing',
                 style: kHeading6,
@@ -106,15 +103,11 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                     final result = state.movies;
                     return MovieList(result);
                   } else if (state is NowPlayingMovieError) {
-                    return Expanded(
-                      child: Center(
-                        child: Text(state.message),
-                      ),
+                    return Center(
+                      child: Text(state.message),
                     );
                   } else {
-                    return Expanded(
-                      child: Container(),
-                    );
+                    return Container();
                   }
                 },
               ),
@@ -132,15 +125,11 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                     final result = state.movies;
                     return TVSeriesList(result);
                   } else if (state is NowPlayingTVSeriesError) {
-                    return Expanded(
-                      child: Center(
-                        child: Text(state.message),
-                      ),
+                    return Center(
+                      child: Text(state.message),
                     );
                   } else {
-                    return Expanded(
-                      child: Container(),
-                    );
+                    return Container();
                   }
                 },
               ),
@@ -159,15 +148,11 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                     final result = state.movies;
                     return TVSeriesList(result);
                   } else if (state is PopularTVSeriesError) {
-                    return Expanded(
-                      child: Center(
-                        child: Text(state.message),
-                      ),
+                    return Center(
+                      child: Text(state.message),
                     );
                   } else {
-                    return Expanded(
-                      child: Container(),
-                    );
+                    return Container();
                   }
                 },
               ),
@@ -186,15 +171,11 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                     final result = state.movies;
                     return MovieList(result);
                   } else if (state is PopularMovieError) {
-                    return Expanded(
-                      child: Center(
-                        child: Text(state.message),
-                      ),
+                    return Center(
+                      child: Text(state.message),
                     );
                   } else {
-                    return Expanded(
-                      child: Container(),
-                    );
+                    return Container();
                   }
                 },
               ),
@@ -213,15 +194,11 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                     final result = state.movies;
                     return MovieList(result);
                   } else if (state is TopRatedMovieError) {
-                    return Expanded(
-                      child: Center(
-                        child: Text(state.message),
-                      ),
+                    return Center(
+                      child: Text(state.message),
                     );
                   } else {
-                    return Expanded(
-                      child: Container(),
-                    );
+                    return Container();
                   }
                 },
               ),
@@ -240,15 +217,11 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                     final result = state.movies;
                     return TVSeriesList(result);
                   } else if (state is TopRatedTVSeriesError) {
-                    return Expanded(
-                      child: Center(
-                        child: Text(state.message),
-                      ),
+                    return Center(
+                      child: Text(state.message),
                     );
                   } else {
-                    return Expanded(
-                      child: Container(),
-                    );
+                    return Container();
                   }
                 },
               ),
@@ -291,6 +264,7 @@ class MovieList extends StatelessWidget {
     return Container(
       height: 200,
       child: ListView.builder(
+        shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           final movie = movies[index];
@@ -333,6 +307,7 @@ class TVSeriesList extends StatelessWidget {
     return Container(
       height: 200,
       child: ListView.builder(
+        shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           final movie = movies[index];

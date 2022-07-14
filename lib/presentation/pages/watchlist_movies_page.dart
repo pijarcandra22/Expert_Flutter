@@ -1,13 +1,10 @@
 import 'package:ditonton/common/constants.dart';
-import 'package:ditonton/common/state_enum.dart';
 import 'package:ditonton/common/utils.dart';
 import 'package:ditonton/presentation/bloc/watchlist/watchlist_bloc.dart';
-import 'package:ditonton/presentation/provider/watchlist_movie_notifier.dart';
 import 'package:ditonton/presentation/widgets/movie_card_list.dart';
 import 'package:ditonton/presentation/widgets/tvseries_card_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 class WatchlistMoviesPage extends StatefulWidget {
   static const ROUTE_NAME = '/watchlist-movie';
@@ -23,11 +20,6 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
     super.initState();
     context.read<WatchlistBloc>().add(OnWatchlistDataRequested());
     context.read<WatchlistTVSeriesBloc>().add(OnWatchlistDataRequestedTVSeries());
-    Future.microtask(() =>
-        Provider.of<WatchlistMovieNotifier>(context, listen: false)
-            //..fetchWatchlistMovies()
-            ..fetchWatchlistTVSeries()
-    );
   }
 
   @override
@@ -51,7 +43,7 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
         padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(
           child: Column(
-            children: [
+            children: <Widget>[
               Text(
                 'TV Series Watchlist',
                 style: kHeading6,
@@ -65,7 +57,6 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
                   } else if (state is WatchlistTVSeriesHasData) {
                     final data = state.data;
                     return ListView.builder(
-                      scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         final movie = data[index];
@@ -74,15 +65,11 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
                       itemCount: data.length,
                     );
                   } else if (state is WatchlistTVSeriesError) {
-                    return Expanded(
-                      child: Center(
-                        child: Text(state.message),
-                      ),
+                    return Center(
+                      child: Text(state.message),
                     );
                   } else {
-                    return Expanded(
-                      child: Container(),
-                    );
+                    return Container();
                   }
                 },
               ),
@@ -99,8 +86,8 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
                   } else if (state is WatchlistHasData) {
                     final data = state.data;
                     return ListView.builder(
-                      scrollDirection: Axis.vertical,
                       shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
                         final movie = data[index];
                         return MovieCard(movie);
@@ -108,15 +95,11 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
                       itemCount: data.length,
                     );
                   } else if (state is WatchlistError) {
-                    return Expanded(
-                      child: Center(
-                        child: Text(state.message),
-                      ),
+                    return Center(
+                      child: Text(state.message),
                     );
                   } else {
-                    return Expanded(
-                      child: Container(),
-                    );
+                    return Container();
                   }
                 },
               ),
