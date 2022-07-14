@@ -43,6 +43,7 @@ dependencies:
   rxdart: ^0.27.1
   firebase_core: 1.19.2
   firebase_crashlytics: 2.8.4
+  xcodeproj: ^0.2.2
 
 dev_dependencies:
   mockito: ^5.0.8
