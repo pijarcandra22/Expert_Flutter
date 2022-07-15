@@ -41,7 +41,7 @@ dependencies:
   flutter_bloc: ^8.0.0
   build_runner: ^2.1.11
   rxdart: ^0.27.1
-  firebase_core: 1.19.2
+  firebase_core: ^1.6.0
   firebase_crashlytics: 2.8.4
   xcodeproj: ^0.2.2
 
