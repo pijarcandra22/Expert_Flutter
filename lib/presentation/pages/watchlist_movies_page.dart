@@ -40,71 +40,81 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
         title: Text('Watchlist'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Text(
-                'TV Series Watchlist',
-                style: kHeading6,
-              ),
-              BlocBuilder<WatchlistTVSeriesBloc, WatchlistTVSeriesState>(
-                builder: (context, state) {
-                  if (state is WatchlistTVSeriesLoading) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (state is WatchlistTVSeriesHasData) {
-                    final data = state.data;
-                    return ListView.builder(
-                      shrinkWrap: true,
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'TV Series WatchList',
+              style: kHeading6,
+            ),
+            BlocBuilder<WatchlistTVSeriesBloc, WatchlistTVSeriesState>(
+              builder: (context, state) {
+                if (state is WatchlistTVSeriesLoading) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (state is WatchlistTVSeriesHasData) {
+                  final result = state.data;
+                  return Expanded(
+                    child: ListView.builder(
+                      padding: const EdgeInsets.all(8),
                       itemBuilder: (context, index) {
-                        final movie = data[index];
+                        final movie = result[index];
                         return TVSeriesCard(movie);
                       },
-                      itemCount: data.length,
-                    );
-                  } else if (state is WatchlistTVSeriesError) {
-                    return Center(
+                      itemCount: result.length,
+                    ),
+                  );
+                } else if (state is WatchlistTVSeriesError) {
+                  return Expanded(
+                    child: Center(
                       child: Text(state.message),
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-              ),
-              Text(
-                'Movies Watchlist',
-                style: kHeading6,
-              ),
-              BlocBuilder<WatchlistBloc, WatchlistState>(
-                builder: (context, state) {
-                  if (state is WatchlistLoading) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (state is WatchlistHasData) {
-                    final data = state.data;
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
+                    ),
+                  );
+                } else {
+                  return Expanded(
+                    child: Container(),
+                  );
+                }
+              },
+            ),
+            Text(
+              'Movies',
+              style: kHeading6,
+            ),
+            BlocBuilder<WatchlistBloc, WatchlistState>(
+              builder: (context, state) {
+                if (state is WatchlistLoading) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (state is WatchlistHasData) {
+                  final result = state.data;
+                  return Expanded(
+                    child: ListView.builder(
+                      padding: const EdgeInsets.all(8),
                       itemBuilder: (context, index) {
-                        final movie = data[index];
+                        final movie = result[index];
                         return MovieCard(movie);
                       },
-                      itemCount: data.length,
-                    );
-                  } else if (state is WatchlistError) {
-                    return Center(
+                      itemCount: result.length,
+                    ),
+                  );
+                } else if (state is WatchlistError) {
+                  return Expanded(
+                    child: Center(
                       child: Text(state.message),
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-              ),
-            ],
-          ),
+                    ),
+                  );
+                } else {
+                  return Expanded(
+                    child: Container(),
+                  );
+                }
+              },
+            ),
+          ],
         ),
       ),
     );
